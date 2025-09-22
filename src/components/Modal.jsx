@@ -1,5 +1,3 @@
-// src/components/Modal.jsx
-
 import React, { useState } from 'react';
 
 export default function Modal({ isOpen, onClose, onSave }) {
