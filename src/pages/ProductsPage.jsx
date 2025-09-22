@@ -1,5 +1,3 @@
-// src/pages/ProductsPage.jsx
-
 import React, { useState } from 'react';
 import Modal from '../components/Modal';
 
@@ -29,10 +27,8 @@ export default function ProductsPage() {
     setIsModalOpen(false);
   };
 
-  // --- PERBAIKAN DI SINI ---
   const handleSaveProduct = (newProduct) => {
     // Simulasi penambahan produk baru ke dalam state
-    // Kita tambahkan ID baru (untuk sementara, nanti ini dari database)
     const productWithId = { ...newProduct, id: Date.now(), image: 'https://placehold.co/100x100/7C3AED/FFFFFF?text=Baru' };
     
     // Gunakan setProducts untuk memperbarui daftar produk
@@ -41,8 +37,6 @@ export default function ProductsPage() {
     console.log("Menyimpan produk:", productWithId);
     handleCloseModal();
   };
-  // --- AKHIR PERBAIKAN ---
-
   return (
     <div>
       <div className="flex justify-between items-center mb-6">

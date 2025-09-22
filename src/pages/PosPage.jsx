@@ -1,7 +1,5 @@
-// src/pages/PosPage.jsx
-
 import React, { useState } from 'react';
-import PaymentModal from '../components/PaymentModal'; // <-- IMPORT MODAL BARU
+import PaymentModal from '../components/PaymentModal'; 
 
 // Dummy data
 const dummyProducts = [

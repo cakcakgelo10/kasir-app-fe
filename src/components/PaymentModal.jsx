@@ -1,5 +1,3 @@
-// src/components/PaymentModal.jsx
-
 import React, { useState, useEffect } from 'react';
 
 const formatRupiah = (number) => {
@@ -19,7 +17,6 @@ export default function PaymentModal({ isOpen, onClose, cart, total, onTransacti
 
   useEffect(() => {
     if (isOpen) {
-      // Reset state setiap kali modal dibuka
       setIsSuccess(false);
       setCashReceived('');
       setChange(0);
@@ -43,7 +40,6 @@ export default function PaymentModal({ isOpen, onClose, cart, total, onTransacti
       return;
     }
     
-    // Di sini nanti logika untuk mengirim data ke backend
     console.log('Transaksi berhasil:', {
       items: cart,
       total,
