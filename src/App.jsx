@@ -1,6 +1,6 @@
-// src/App.jsx
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AuthProvider } from './context/AuthProvider';
 
 import LoginPage from './pages/LoginPage';
 import DashboardLayout from './components/layout/DashboardLayout';

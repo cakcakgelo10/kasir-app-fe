@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import Modal from '../components/Modal';
+import ProductForm from '../components/ProductForm';
+import { useProduct } from '../hooks/useProduct';
 
 // Dummy data untuk produk
-const dummyProducts = [
-  { id: 1, name: 'Kopi Susu Gula Aren', sku: 'KS-001', category: 'Minuman', stock: 100, price: 22000, image: 'https://placehold.co/100x100/3B82F6/FFFFFF?text=Kopi' },
-  { id: 2, name: 'Croissant Cokelat', sku: 'CR-002', category: 'Makanan', stock: 50, price: 18000, image: 'https://placehold.co/100x100/10B981/FFFFFF?text=Roti' },
-  { id: 3, name: 'Teh Melati', sku: 'TH-001', category: 'Minuman', stock: 120, price: 15000, image: 'https://placehold.co/100x100/F59E0B/FFFFFF?text=Teh' },
-  { id: 4, name: 'Air Mineral', sku: 'AM-001', category: 'Minuman', stock: 250, price: 5000, image: 'https://placehold.co/100x100/6366F1/FFFFFF?text=Air' },
-];
+// const dummyProducts = [
+//   { id: 1, name: 'Kopi Susu Gula Aren', sku: 'KS-001', category: 'Minuman', stock: 100, price: 22000, image: 'https://placehold.co/100x100/3B82F6/FFFFFF?text=Kopi' },
+//   { id: 2, name: 'Croissant Cokelat', sku: 'CR-002', category: 'Makanan', stock: 50, price: 18000, image: 'https://placehold.co/100x100/10B981/FFFFFF?text=Roti' },
+//   { id: 3, name: 'Teh Melati', sku: 'TH-001', category: 'Minuman', stock: 120, price: 15000, image: 'https://placehold.co/100x100/F59E0B/FFFFFF?text=Teh' },
+//   { id: 4, name: 'Air Mineral', sku: 'AM-001', category: 'Minuman', stock: 250, price: 5000, image: 'https://placehold.co/100x100/6366F1/FFFFFF?text=Air' },
+// ];
 
 // Icon
 const PlusIcon = () => <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>;
@@ -16,27 +18,47 @@ const DeleteIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentCol
 
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState(dummyProducts);
+  const { products, addProduct, updateProduct, deleteProduct } = useProduct();
+  // const [products, setProducts] = useState(dummyProducts);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [editingProduct, setEditingProduct] = useState(null);
+
   const handleAddProduct = () => {
+    setEditingProduct(null);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setEditingProduct(null);
   };
 
-  const handleSaveProduct = (newProduct) => {
-    // Simulasi penambahan produk baru ke dalam state
-    const productWithId = { ...newProduct, id: Date.now(), image: 'https://placehold.co/100x100/7C3AED/FFFFFF?text=Baru' };
+   const handleEditProduct = (product) => {
+    setEditingProduct(product); // Simpan data produk yang akan diedit
+    setIsModalOpen(true);     // Buka modal
+  };
+
+  const handleDeleteProduct = (productId) => {
+  if (window.confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
+    deleteProduct(productId); // <-- Panggil fungsi dari context
+  }
+  };
+
+   const handleSaveProduct = (formData) => {
+
+    console.log("2. [ProductsPage] handleSaveProduct menerima data:", formData);
     
-    // Gunakan setProducts untuk memperbarui daftar produk
-    setProducts(prevProducts => [productWithId, ...prevProducts]);
-    
-    console.log("Menyimpan produk:", productWithId);
+    if (editingProduct) {
+      // Jika ada 'editingProduct', berarti ini mode edit
+      updateProduct(editingProduct.id, formData);
+    } else {
+      // Jika tidak, ini mode tambah
+      addProduct(formData);
+    }
     handleCloseModal();
   };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -82,8 +104,8 @@ export default function ProductsPage() {
                 <td className="px-5 py-4 text-sm text-right"><p className="text-gray-900 whitespace-no-wrap">Rp {product.price.toLocaleString('id-ID')}</p></td>
                 <td className="px-5 py-4 text-sm text-center">
                   <div className="flex item-center justify-center space-x-3">
-                    <button className="text-yellow-500 hover:text-yellow-700 transition"><EditIcon /></button>
-                    <button className="text-red-500 hover:text-red-700 transition"><DeleteIcon /></button>
+                    <button onClick={() => handleEditProduct(product)} className="text-yellow-500 hover:text-yellow-700 transition"><EditIcon /></button>
+                    <button onClick={() => handleDeleteProduct(product.id)} className="text-red-500 hover:text-red-700 transition"><DeleteIcon /></button>
                   </div>
                 </td>
               </tr>
@@ -92,7 +114,13 @@ export default function ProductsPage() {
         </table>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveProduct} />
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <ProductForm 
+          onSave={handleSaveProduct} 
+          onCancel={handleCloseModal}
+          existingProduct={editingProduct} 
+        />
+      </Modal>
     </div>
   );
 }

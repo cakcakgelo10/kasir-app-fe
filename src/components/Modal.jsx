@@ -1,56 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-export default function Modal({ isOpen, onClose, onSave }) {
-  const [productName, setProductName] = useState('');
-  const [sku, setSku] = useState('');
-  const [category, setCategory] = useState('');
-  const [stock, setStock] = useState(0);
-  const [price, setPrice] = useState(0);
+// Komponen ikon kecil untuk tombol tutup
+const CloseIcon = () => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+  </svg>
+);
 
+// Prop sekarang hanya: isOpen, onClose, dan children
+export default function Modal({ isOpen, onClose, children }) {
   if (!isOpen) return null;
 
-  const handleSubmit = () => {
-    // Validasi sederhana
-    if (!productName || !sku || !category) {
-      alert('Harap isi semua field yang wajib diisi.');
-      return;
-    }
-    onSave({ name: productName, sku, category, stock, price });
-  };
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-8 m-4">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Tambah Produk Baru</h2>
-        
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="productName" className="block text-sm font-medium text-gray-700">Nama Produk</label>
-            <input type="text" id="productName" value={productName} onChange={(e) => setProductName(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"/>
-          </div>
-          <div>
-            <label htmlFor="sku" className="block text-sm font-medium text-gray-700">SKU (Stock Keeping Unit)</label>
-            <input type="text" id="sku" value={sku} onChange={(e) => setSku(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"/>
-          </div>
-          <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700">Kategori</label>
-            <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"/>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stok Awal</label>
-              <input type="number" id="stock" value={stock} onChange={(e) => setStock(parseInt(e.target.value, 10))} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"/>
-            </div>
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700">Harga</label>
-              <input type="number" id="price" value={price} onChange={(e) => setPrice(parseInt(e.target.value, 10))} className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"/>
-            </div>
-          </div>
-        </div>
+    // Latar belakang (backdrop), klik di sini akan menutup modal
+    <div
+      onClick={onClose}
+      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4 transition-opacity duration-300"
+    >
+      {/* Konten Modal */}
+      <div
+        // Menghentikan event klik agar modal tidak ikut tertutup saat area putih diklik
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg relative"
+      >
+        {/* Tombol Tutup Universal (di pojok kanan atas) */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
+        >
+          <CloseIcon />
+        </button>
 
-        <div className="mt-8 flex justify-end space-x-3">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition">Batal</button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Simpan</button>
+        {/* Di sinilah ProductForm atau konten lainnya akan ditampilkan */}
+        <div className="p-8">
+          {children}
         </div>
       </div>
     </div>

@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import PaymentModal from '../components/PaymentModal'; 
+import { useProduct } from '../hooks/useProduct';
 
 // Dummy data
-const dummyProducts = [
-  { id: 1, name: 'Kopi Susu Gula Aren', category: 'Minuman', stock: 100, price: 22000, image: 'https://placehold.co/200x200/3B82F6/FFFFFF?text=Kopi' },
-  { id: 2, name: 'Croissant Cokelat', category: 'Makanan', stock: 50, price: 18000, image: 'https://placehold.co/200x200/10B981/FFFFFF?text=Roti' },
-  { id: 3, name: 'Teh Melati', category: 'Minuman', stock: 120, price: 15000, image: 'https://placehold.co/200x200/F59E0B/FFFFFF?text=Teh' },
-  { id: 4, name: 'Air Mineral', category: 'Minuman', stock: 250, price: 5000, image: 'https://placehold.co/200x200/6366F1/FFFFFF?text=Air' },
-  { id: 5, name: 'Donat Gula', category: 'Makanan', stock: 80, price: 8000, image: 'https://placehold.co/200x200/EC4899/FFFFFF?text=Donat' },
-  { id: 6, name: 'Jus Alpukat', category: 'Minuman', stock: 40, price: 20000, image: 'https://placehold.co/200x200/84CC16/FFFFFF?text=Jus' },
-];
+// const dummyProducts = [
+//   { id: 1, name: 'Kopi Susu Gula Aren', category: 'Minuman', stock: 100, price: 22000, image: 'https://placehold.co/200x200/3B82F6/FFFFFF?text=Kopi' },
+//   { id: 2, name: 'Croissant Cokelat', category: 'Makanan', stock: 50, price: 18000, image: 'https://placehold.co/200x200/10B981/FFFFFF?text=Roti' },
+//   { id: 3, name: 'Teh Melati', category: 'Minuman', stock: 120, price: 15000, image: 'https://placehold.co/200x200/F59E0B/FFFFFF?text=Teh' },
+//   { id: 4, name: 'Air Mineral', category: 'Minuman', stock: 250, price: 5000, image: 'https://placehold.co/200x200/6366F1/FFFFFF?text=Air' },
+//   { id: 5, name: 'Donat Gula', category: 'Makanan', stock: 80, price: 8000, image: 'https://placehold.co/200x200/EC4899/FFFFFF?text=Donat' },
+//   { id: 6, name: 'Jus Alpukat', category: 'Minuman', stock: 40, price: 20000, image: 'https://placehold.co/200x200/84CC16/FFFFFF?text=Jus' },
+// ];
 
 // Ikon
 const PlusCircleIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
@@ -17,7 +18,8 @@ const MinusCircleIcon = () => <svg className="w-5 h-5" fill="none" stroke="curre
 const TrashIcon = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>;
 
 export default function PosPage() {
-  const [products] = useState(dummyProducts);
+  const { products } = useProduct();
+  // const [products] = useState(dummyProducts);
   const [cart, setCart] = useState([]);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false); // <-- STATE BARU
   const taxRate = 0.11;
